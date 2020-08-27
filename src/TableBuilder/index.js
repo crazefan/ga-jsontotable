@@ -30,11 +30,11 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
+// const useStyles = makeStyles({
+//   table: {
+//     minWidth: 700,
+//   },
+// });
 
 const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
   const kids = getRowKids(rowData);
@@ -101,7 +101,7 @@ const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
       {hasKids && __isOpen && (
         <TableRow>
           <TableCell colSpan={100}>
-            <Box py={1} px={1}>
+            <Box>
               <Typography>{key}</Typography>
               <TableBuilder
                 rows={records}
@@ -118,11 +118,10 @@ const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
 
 const TableBuilder = ({ rows, onRowUpdated, onRowDeleted }) => {
   const headLabels = getHeadLabelsFromRows(rows);
-  const classes = useStyles();
 
   return (
     <Box my={2} mx={2}>
-      <TableContainer className={classes.table} component={Paper}>
+      <TableContainer component={Paper}>
         <Table size={"small"}>
           <TableHead>
             <TableRow>
