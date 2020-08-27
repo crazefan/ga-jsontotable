@@ -5,8 +5,14 @@ import React, { useState } from "react";
 function App() {
   const [data, setData] = useState(exampleData);
 
-  const onRowUpdated = () => {};
-  const onRowDeleted = () => {};
+  const onRowUpdated = (rowToUpdate, indexToUpdate) => {
+    setData(
+      data.map((row, index) => (index === indexToUpdate ? rowToUpdate : row))
+    );
+  };
+  const onRowDeleted = (indexToDelete) => {
+    setData(data.filter((row, index) => index !== indexToDelete));
+  };
 
   return (
     <div>

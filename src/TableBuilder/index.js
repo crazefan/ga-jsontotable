@@ -19,26 +19,46 @@ import {
   KeyboardArrowRight,
 } from "@material-ui/icons";
 
-const RowBuilder = ({ rowData, onUpdated, onDeleted }) => {
+const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
   const kids = getRowKids(rowData);
-  const { data, __isOpen = true } = rowData;
+  const { data, __isOpen = false } = rowData;
   const { key, records } = kids || {};
   const hasKids = kids && Array.isArray(records) && records.length > 0;
 
-  const onRowUpdated = () => {};
+  const onToggleOpen = () => {
+    const newRowState = { ...rowData, __isOpen: !__isOpen };
+    onUpdated(newRowState, rowIndex);
+  };
+
+  const onRowUpdated = (rowToUpdate, indexToUpdate) => {
+    const newRowState = {
+      ...rowData,
+      kids: {
+        [key]: {
+          records: records.map((record, i) =>
+            i === indexToUpdate ? rowToUpdate : record
+          ),
+        },
+      },
+    };
+  };
   const onRowDeleted = () => {};
   return (
     <>
       <TableRow>
         <TableCell>
-          <IconButton>{kids ? <KeyboardArrowDown /> : null}</IconButton>
+          {hasKids && (
+            <IconButton onClick={onToggleOpen}>
+              {__isOpen ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
+            </IconButton>
+          )}
         </TableCell>
         {Object.keys(data).map((key) => (
           <TableCell key={`table-cell-${key}`}>{data[key]}</TableCell>
         ))}
         <TableCell>
           <IconButton>
-            <Cancel />
+            <Cancel onClick={onRowDeleted} />
           </IconButton>
         </TableCell>
       </TableRow>
@@ -76,6 +96,7 @@ const TableBuilder = ({ rows, onRowUpdated, onRowDeleted }) => {
           <RowBuilder
             key={`row-builder-item-${JSON.stringify(row)}`}
             rowData={row}
+            rowIndex={i}
             onDeleted={onRowDeleted}
             onUpdated={onRowUpdated}
           />
