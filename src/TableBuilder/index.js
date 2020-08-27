@@ -21,13 +21,19 @@ import {
 
 const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
   const kids = getRowKids(rowData);
+
   const { data, __isOpen = false } = rowData;
   const { key, records } = kids || {};
+
   const hasKids = kids && Array.isArray(records) && records.length > 0;
 
   const onToggleOpen = () => {
     const newRowState = { ...rowData, __isOpen: !__isOpen };
     onUpdated(newRowState, rowIndex);
+  };
+
+  const onDeleteClick = () => {
+    onDeleted(rowIndex);
   };
 
   const onRowUpdated = (rowToUpdate, indexToUpdate) => {
@@ -41,8 +47,21 @@ const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
         },
       },
     };
+    onUpdated(newRowState, rowIndex);
   };
-  const onRowDeleted = () => {};
+
+  const onRowDeleted = (indexToDelete) => {
+    const newRowState = {
+      ...rowData,
+      kids: {
+        [key]: {
+          records: records.filter((record, index) => index !== indexToDelete),
+        },
+      },
+    };
+    onUpdated(newRowState, rowIndex);
+  };
+
   return (
     <>
       <TableRow>
@@ -57,15 +76,15 @@ const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
           <TableCell key={`table-cell-${key}`}>{data[key]}</TableCell>
         ))}
         <TableCell>
-          <IconButton>
-            <Cancel onClick={onRowDeleted} />
+          <IconButton onClick={onDeleteClick}>
+            <Cancel />
           </IconButton>
         </TableCell>
       </TableRow>
       {hasKids && __isOpen && (
         <TableRow>
           <TableCell colSpan={100}>
-            <Box py={4}>
+            <Box py={4} px={4}>
               <Typography>{key}</Typography>
               <TableBuilder
                 rows={records}
