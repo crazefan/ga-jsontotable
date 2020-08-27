@@ -76,7 +76,7 @@ const TableBuilder = ({ rows, onRowUpdated, onRowDeleted }) => {
           <RowBuilder
             key={`row-builder-item-${JSON.stringify(row)}`}
             rowData={row}
-            onDeleted={onRowUpdated}
+            onDeleted={onRowDeleted}
             onUpdated={onRowUpdated}
           />
         ))}
