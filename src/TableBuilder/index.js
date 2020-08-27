@@ -11,13 +11,30 @@ import {
   IconButton,
   TableBody,
   Typography,
+  TableContainer,
+  Paper,
 } from "@material-ui/core";
+
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 import {
   Cancel,
   KeyboardArrowDown,
   KeyboardArrowRight,
 } from "@material-ui/icons";
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: "#b8ffef",
+    color: theme.palette.common.black,
+  },
+}))(TableCell);
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 700,
+  },
+});
 
 const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
   const kids = getRowKids(rowData);
@@ -84,7 +101,7 @@ const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
       {hasKids && __isOpen && (
         <TableRow>
           <TableCell colSpan={100}>
-            <Box py={4} px={4}>
+            <Box py={1} px={1}>
               <Typography>{key}</Typography>
               <TableBuilder
                 rows={records}
@@ -101,27 +118,35 @@ const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
 
 const TableBuilder = ({ rows, onRowUpdated, onRowDeleted }) => {
   const headLabels = getHeadLabelsFromRows(rows);
+  const classes = useStyles();
+
   return (
-    <Table size={"small"}>
-      <TableHead>
-        <TableRow>
-          {headLabels.map((label, i) => (
-            <TableCell key={`head-label-${label}-${i}`}>{label}</TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rows.map((row, i) => (
-          <RowBuilder
-            key={`row-builder-item-${JSON.stringify(row)}`}
-            rowData={row}
-            rowIndex={i}
-            onDeleted={onRowDeleted}
-            onUpdated={onRowUpdated}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <Box my={2} mx={2}>
+      <TableContainer className={classes.table} component={Paper}>
+        <Table size={"small"}>
+          <TableHead>
+            <TableRow>
+              {headLabels.map((label, i) => (
+                <StyledTableCell key={`head-label-${label}-${i}`}>
+                  {label}
+                </StyledTableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, i) => (
+              <RowBuilder
+                key={`row-builder-item-${JSON.stringify(row)}`}
+                rowData={row}
+                rowIndex={i}
+                onDeleted={onRowDeleted}
+                onUpdated={onRowUpdated}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 

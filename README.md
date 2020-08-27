@@ -1,6 +1,8 @@
 Test project for GraphAware.
 
-Build with React and Material-UI.
+Built with React and Material-UI.
+
+Project is deployed on Netlify, [click here.](https://ga-jsontotable.netlify.app/)
 
 To install dependencies run
 
