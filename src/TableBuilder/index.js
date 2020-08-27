@@ -15,7 +15,7 @@ import {
   Paper,
 } from "@material-ui/core";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 import {
   Cancel,
@@ -29,12 +29,6 @@ const StyledTableCell = withStyles((theme) => ({
     color: theme.palette.common.black,
   },
 }))(TableCell);
-
-// const useStyles = makeStyles({
-//   table: {
-//     minWidth: 700,
-//   },
-// });
 
 const RowBuilder = ({ rowData, onUpdated, rowIndex, onDeleted }) => {
   const kids = getRowKids(rowData);
