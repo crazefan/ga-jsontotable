@@ -21,7 +21,12 @@ import {
 
 const RowBuilder = ({ rowData, onUpdated, onDeleted }) => {
   const kids = getRowKids(rowData);
-  const { data, isOpen = false } = rowData;
+  const { data, __isOpen = true } = rowData;
+  const { key, records } = kids || {};
+  const hasKids = kids && Array.isArray(records) && records.length > 0;
+
+  const onRowUpdated = () => {};
+  const onRowDeleted = () => {};
   return (
     <>
       <TableRow>
@@ -37,6 +42,20 @@ const RowBuilder = ({ rowData, onUpdated, onDeleted }) => {
           </IconButton>
         </TableCell>
       </TableRow>
+      {hasKids && __isOpen && (
+        <TableRow>
+          <TableCell colSpan={100}>
+            <Box py={4}>
+              <Typography>{key}</Typography>
+              <TableBuilder
+                rows={records}
+                onRowUpdated={onRowUpdated}
+                onRowDeleted={onRowDeleted}
+              />
+            </Box>
+          </TableCell>
+        </TableRow>
+      )}
     </>
   );
 };
@@ -44,7 +63,7 @@ const RowBuilder = ({ rowData, onUpdated, onDeleted }) => {
 const TableBuilder = ({ rows, onRowUpdated, onRowDeleted }) => {
   const headLabels = getHeadLabelsFromRows(rows);
   return (
-    <Table>
+    <Table size={"small"}>
       <TableHead>
         <TableRow>
           {headLabels.map((label, i) => (

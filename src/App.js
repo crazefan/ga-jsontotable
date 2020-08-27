@@ -6,10 +6,15 @@ function App() {
   const [data, setData] = useState(exampleData);
 
   const onRowUpdated = () => {};
+  const onRowDeleted = () => {};
 
   return (
     <div>
-      <TableBuilder rows={data} onRowUpdated={onRowUpdated} />
+      <TableBuilder
+        rows={data}
+        onRowUpdated={onRowUpdated}
+        onRowDeleted={onRowDeleted}
+      />
     </div>
   );
 }
